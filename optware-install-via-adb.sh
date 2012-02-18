@@ -49,7 +49,10 @@ t_mkdir_p () {
 }
 
 extract_libc () {
-    tar xfj $cs08q1_fname $list
+    if [ ! -d $(echo $libc_path | sed -e 's%/.*%%') ]; then
+        echo Extracting $cs08q1_fname
+        tar xfj $cs08q1_fname $list
+    fi
 }
 
 install_system_lib () {
@@ -133,7 +136,7 @@ t_mkdir_p $OPTWARE_DIR/rootbin
 t_cd_ln . -s $OPTWARE_DIR/rootbin /bin
 
 echo "== Installing libc =="
-#extract_libc
+extract_libc
 install_libc $libc_libs
 install_system_bin usr/bin/ldd
 
