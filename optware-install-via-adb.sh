@@ -12,16 +12,16 @@ WRITABLE_DIR=/data/local
 
 tmp_dir=$WRITABLE_DIR/optware.tmp
 cs08q1_fname=arm-2008q1-126-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-libc_path=arm-2008q1/arm-none-linux-gnueabi/libc/lib
-libc_libs="ld-2.5.so ld-linux.so.3 \
-      libc-2.5.so libc.so.6 \
-      libm-2.5.so libm.so.6 \
-      librt-2.5.so librt.so.1 \
-      libpthread-2.5.so libpthread.so.0 \
-      libresolv-2.5.so libresolv.so.2 \
-      libdl-2.5.so libdl.so.2 \
-      libnss_dns-2.5.so libnss_dns.so.2 \
-      libutil-2.5.so libutil.so.1 \
+libc_path=arm-2008q1/arm-none-linux-gnueabi/libc
+libc_libs="lib/ld-2.5.so ld-linux.so.3 \
+      lib/libc-2.5.so libc.so.6 \
+      lib/libm-2.5.so libm.so.6 \
+      lib/librt-2.5.so librt.so.1 \
+      lib/libpthread-2.5.so libpthread.so.0 \
+      lib/libresolv-2.5.so libresolv.so.2 \
+      lib/libdl-2.5.so libdl.so.2 \
+      lib/libnss_dns-2.5.so libnss_dns.so.2 \
+      lib/libutil-2.5.so libutil.so.1 \
       "
 
 #
@@ -49,21 +49,24 @@ t_mkdir_p () {
 }
 
 extract_libc () {
-    local list=""
-    while [ -n "$1" ]; do
-        list="$list $libc_path/$1"
-        shift
-        shift
-    done
     tar xfj $cs08q1_fname $list
 }
 
 install_system_lib () {
-    echo "Installing system lib: $1"
+    local f=$(basename $1)
+    echo "Installing system lib: $f"
     adb push $libc_path/$1 $tmp_dir
-    t_cp $tmp_dir/$1 /lib/$1
-    t_chmod 0755 /lib/$1
-    t_cd_ln /lib/ -s $1 $2
+    t_cp $tmp_dir/$f /lib/$f
+    t_chmod 0755 /lib/$f
+    t_cd_ln /lib/ -s $f $2
+}
+
+install_system_bin () {
+    local f=$(basename $1)
+    echo "Installing system bin: $1"
+    adb push $libc_path/$1 $tmp_dir
+    t_cp $tmp_dir/$f /bin/$f
+    t_chmod 0755 /bin/$f
 }
 
 install_libc () {
@@ -126,10 +129,13 @@ adb shell mkdir $tmp_dir
 t_mkdir_p $OPTWARE_DIR
 t_cd_ln . -s $OPTWARE_DIR /opt
 
+t_mkdir_p $OPTWARE_DIR/rootbin
+t_cd_ln . -s $OPTWARE_DIR/rootbin /bin
 
 echo "== Installing libc =="
-#extract_libc $libc_libs
+#extract_libc
 install_libc $libc_libs
+install_system_bin usr/bin/ldd
 
 echo "== Installing bootstrap ipkg =="
 rm -rf opt
@@ -149,8 +155,6 @@ adb push opt $tmp_dir
 install_bin busybox
 
 echo "== Initializing bootstrap /bin =="
-t_mkdir_p $OPTWARE_DIR/rootbin
-t_cd_ln . -s $OPTWARE_DIR/rootbin /bin
 # We need sane shell as /bin/sh
 t_cd_ln /bin -s /opt/bin/busybox sh
 # We need minimal set of sane shell commands to run update-alternatives
