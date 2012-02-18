@@ -200,4 +200,4 @@ t_chmod 0755 /opt/optware.sh
 adb shell su -c "mount -o ro,remount rootfs /"
 
 echo "Optware for Android installation complete."
-echo "To start opware session, execute /opt/optware.sh"
+echo "To start optware session, execute /opt/optware.sh"
