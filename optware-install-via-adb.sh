@@ -184,6 +184,9 @@ t_mkdir_p /etc
 adb shell su -c "mount -o rw,remount /system /system"
 adb shell su -c "rm /etc/resolv.conf"
 t_cd_ln . -s /opt/etc/resolv.conf /etc/resolv.conf
+
+echo "== Configuring /etc/mtab =="
+t_cd_ln . -s /proc/mounts /etc/mtab
 adb shell su -c "mount -o ro,remount /system /system"
 
 echo "== Creating optware init script =="
