@@ -21,6 +21,7 @@ libc_libs="ld-2.5.so ld-linux.so.3 \
       libresolv-2.5.so libresolv.so.2 \
       libdl-2.5.so libdl.so.2 \
       libnss_dns-2.5.so libnss_dns.so.2 \
+      libutil-2.5.so libutil.so.1 \
       "
 
 #
