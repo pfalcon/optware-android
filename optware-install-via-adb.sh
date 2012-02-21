@@ -16,6 +16,11 @@
 OPTWARE_DIR=/data/local/optware
 WRITABLE_DIR=/data/local
 
+feed=http://ipkg.nslu2-linux.org/feeds/optware/cs08q1armel/cross/stable
+
+
+# DO NOT edit anything below this line unless you know what you are doing
+
 tmp_dir=$WRITABLE_DIR/optware.tmp
 cs08q1_fname=arm-2008q1-126-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
 libc_path=arm-2008q1/arm-none-linux-gnueabi/libc
@@ -110,18 +115,44 @@ install_ipkg () {
     t_cd_ln /opt/lib/ -s libipkg.so.0.0.0 libipkg.so
 }
 
+fetch_package_index () {
+    if [ ! -f Packages ]; then
+        echo "Downloading Optware package index"
+        wget -q $feed/Packages
+    else
+        echo "Using cached Optware package index"
+    fi
+}
+
+get_package_fname () {
+    awk "/^Filename: ${1}_/ {print \$2}" Packages
+}
+
+fetch_package () {
+    if [ -z "$1" ]; then
+        echo "Unexpected error: package '$1' not found in index"
+        exit 1
+    fi
+    if [ ! -f "$1" ]; then
+        echo "Downloading Optware package $1"
+        wget -q $feed/$1
+    else
+        echo "Using cached package $1"
+    fi
+}
+
 if [ ! -f $cs08q1_fname ]; then
     echo "You need CodeSourcery ARM-Linux toolchain: $cs08q1_fname"
     exit 1
 fi
 
-
-feed=http://ipkg.nslu2-linux.org/feeds/optware/cs08q1armel/cross/stable
-# ipk_name=`wget -qO- $feed/Packages | awk '/^Filename: ipkg-opt/ {print $2}'`
-#wget -c http://ipkg.nslu2-linux.org/feeds/optware/cs08q1armel/cross/stable/ipkg-opt_0.99.163-10_arm.ipk
-#http://ipkg.nslu2-linux.org/feeds/optware/cs08q1armel/cross/stable/wget_1.12-2_arm.ipk
-ipkg_fname=ipkg-opt_0.99.163-10_arm.ipk
-# wget $feed/$ipk_name
+fetch_package_index
+ipkg_fname=$(get_package_fname ipkg-opt)
+wget_fname=$(get_package_fname wget)
+busybox_fname=$(get_package_fname busybox-base)
+fetch_package $ipkg_fname
+fetch_package $wget_fname
+fetch_package $busybox_fname
 
 adb shell su -c "mount -o rw,remount rootfs /"
 
@@ -153,13 +184,13 @@ install_ipkg
 
 echo "== Installing bootstrap wget =="
 rm -rf opt
-tar -xOzf wget_1.12-2_arm.ipk ./data.tar.gz | tar -xzf -
+tar -xOzf $wget_fname ./data.tar.gz | tar -xzf -
 adb push opt $tmp_dir
 install_bin wget
 
 echo "== Installing bootstrap busybox =="
 rm -rf opt
-tar -xOzf busybox-base_1.10.3-1_arm.ipk ./data.tar.gz | tar -xzf -
+tar -xOzf $busybox_fname ./data.tar.gz | tar -xzf -
 adb push opt $tmp_dir
 install_bin busybox
 
