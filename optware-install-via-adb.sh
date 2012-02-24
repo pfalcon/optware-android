@@ -56,7 +56,7 @@ t_chmod () {
 
 t_mkdir_p () {
     # This doesn't complain if dir exists, but can't create intermediate dirs
-    adb shell su -c "ls $1 2>/dev/null || mkdir $1"
+    adb shell su -c "ls $1 >/dev/null 2>&1 || mkdir $1"
 }
 
 t_remount_rw () {
