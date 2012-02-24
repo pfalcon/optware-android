@@ -59,6 +59,14 @@ t_mkdir_p () {
     adb shell su -c "ls $1 2>/dev/null || mkdir $1"
 }
 
+t_remount_rw () {
+    adb shell su -c "mount -o rw,remount $1 $1"
+}
+
+t_remount_ro () {
+    adb shell su -c "mount -o ro,remount $1 $1"
+}
+
 extract_libc () {
     if [ ! -d $(echo $libc_path | sed -e 's%/.*%%') ]; then
         echo Extracting $cs08q1_fname
@@ -172,7 +180,7 @@ fetch_package $ipkg_fname
 fetch_package $wget_fname
 fetch_package $busybox_fname
 
-adb shell su -c "mount -o rw,remount rootfs /"
+t_remount_rw
 
 # Start from scratch
 echo "== (Re)initializing optware environment =="
