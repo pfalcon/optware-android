@@ -165,6 +165,7 @@ optware_uninstall () {
     adb shell su -c "rm /bin"
     adb shell su -c "rm /opt"
     adb shell su -c "rm /tmp"
+    adb shell rm -r $tmp_dir
 }
 
 #
@@ -233,6 +234,8 @@ rm -rf opt
 tar -xOzf $busybox_fname ./data.tar.gz | tar -xzf -
 adb push opt $tmp_dir
 install_bin busybox
+
+adb shell rm -r $tmp_dir
 
 echo "== Initializing bootstrap /bin =="
 # We need sane shell as /bin/sh
