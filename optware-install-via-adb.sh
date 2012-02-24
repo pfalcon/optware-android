@@ -171,6 +171,20 @@ optware_uninstall () {
 # Main code
 #
 
+if [ "$1" == "" ]; then
+    echo "This script installs NSLU Optware on an Android device connected using ADB"
+    echo "Usage: $0 install|uninstall"
+    exit 1
+fi
+
+if [ "$1" == "uninstall" ]; then
+    t_remount_rw /
+    optware_uninstall
+    t_remount_ro /
+    exit
+fi
+
+
 fetch_toolchain
 fetch_package_index
 ipkg_fname=$(get_package_fname ipkg-opt)
@@ -180,7 +194,7 @@ fetch_package $ipkg_fname
 fetch_package $wget_fname
 fetch_package $busybox_fname
 
-t_remount_rw
+t_remount_rw /
 
 # Start from scratch
 echo "== (Re)initializing optware environment =="
