@@ -151,6 +151,13 @@ fetch_toolchain () {
     fi
 }
 
+optware_uninstall () {
+    adb shell su -c "rm -r $OPTWARE_DIR"
+    adb shell su -c "rm /lib"
+    adb shell su -c "rm /bin"
+    adb shell su -c "rm /opt"
+    adb shell su -c "rm /tmp"
+}
 
 #
 # Main code
@@ -169,10 +176,7 @@ adb shell su -c "mount -o rw,remount rootfs /"
 
 # Start from scratch
 echo "== (Re)initializing optware environment =="
-adb shell su -c "rm -r $OPTWARE_DIR"
-adb shell su -c "rm /lib"
-adb shell su -c "rm /bin"
-adb shell su -c "rm /opt"
+optware_uninstall
 
 adb shell rm -r $tmp_dir
 adb shell mkdir $tmp_dir
