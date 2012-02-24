@@ -179,6 +179,9 @@ t_cd_ln . -s $OPTWARE_DIR /opt
 t_mkdir_p $OPTWARE_DIR/rootbin
 t_cd_ln . -s $OPTWARE_DIR/rootbin /bin
 
+t_mkdir_p $OPTWARE_DIR/tmp
+t_cd_ln . -s $OPTWARE_DIR/tmp /tmp
+
 echo "== Installing libc =="
 extract_libc
 install_libc $libc_libs
@@ -241,6 +244,7 @@ adb shell su -c "echo mount -o rw,remount rootfs / >>/opt/optware-init.sh"
 adb shell su -c "echo ln -s $OPTWARE_DIR /opt >>/opt/optware-init.sh"
 adb shell su -c "echo ln -s $OPTWARE_DIR/rootlib /lib >>/opt/optware-init.sh"
 adb shell su -c "echo ln -s $OPTWARE_DIR/rootbin /bin >>/opt/optware-init.sh"
+adb shell su -c "echo ln -s $OPTWARE_DIR/tmp /tmp >>/opt/optware-init.sh"
 adb shell su -c "echo mount -o ro,remount rootfs / >>/opt/optware-init.sh"
 t_chmod 0755 /opt/optware-init.sh
 
