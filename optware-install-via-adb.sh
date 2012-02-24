@@ -211,6 +211,10 @@ t_cd_ln . -s $OPTWARE_DIR/rootbin /bin
 t_mkdir_p $OPTWARE_DIR/tmp
 t_cd_ln . -s $OPTWARE_DIR/tmp /tmp
 
+t_mkdir_p $OPTWARE_DIR/home
+t_mkdir_p $OPTWARE_DIR/home/root
+t_mkdir_p $OPTWARE_DIR/home/user
+
 echo "== Installing libc =="
 extract_libc
 install_libc $libc_libs
@@ -284,6 +288,7 @@ echo "== Creating optware startup script =="
 adb shell su -c "echo #!/system/bin/sh >/opt/optware.sh"
 adb shell su -c "echo 'ls /opt >/dev/null 2>&1 ||' su -c $OPTWARE_DIR/optware-init.sh >>/opt/optware.sh"
 adb shell su -c "echo export PATH=/opt/sbin:/opt/bin:/bin:/system/bin >>/opt/optware.sh"
+adb shell su -c "echo export HOME=/home/user >>/opt/optware.sh"
 adb shell su -c "echo /bin/sh >>/opt/optware.sh"
 t_chmod 0755 /opt/optware.sh
 
