@@ -198,9 +198,7 @@ fetch_package $busybox_fname
 t_remount_rw /
 
 # Start from scratch
-echo "== (Re)initializing optware environment =="
-optware_uninstall
-
+echo "== Initializing optware environment =="
 adb shell rm -r $tmp_dir
 adb shell mkdir $tmp_dir
 
@@ -250,6 +248,7 @@ t_cd_ln /bin -s /opt/bin/busybox head
 t_cd_ln /bin -s /opt/bin/busybox sort
 t_cd_ln /bin -s /opt/bin/busybox dirname
 t_cd_ln /bin -s /opt/bin/busybox ln
+t_cd_ln /bin -s /opt/bin/busybox mv
 
 echo "== Configuring package feed =="
 t_mkdir_p /opt/etc
@@ -289,6 +288,20 @@ adb shell su -c "echo /bin/sh >>/opt/optware.sh"
 t_chmod 0755 /opt/optware.sh
 
 t_remount_ro /
+
+echo "== Reinstalling bootstrap packages =="
+echo "Make sure that your device is woken up and connected to the Internet"
+echo "Press Enter to continue"
+read
+#
+# Now that we have all dependencies to run ipkg bootstraped on device,
+# we need to use ipkg to reinstall itself and all those dependencies,
+# to make sure they're installed and configured properly.
+#
+adb shell PATH=/opt/bin:/bin /opt/bin/ipkg update
+adb shell PATH=/opt/bin:/bin /opt/bin/ipkg install ipkg-opt
+adb shell PATH=/opt/bin:/bin /opt/bin/ipkg install wget
+adb shell PATH=/opt/bin:/bin /opt/bin/ipkg install busybox
 
 echo "Optware for Android installation complete."
 echo "To start optware session, execute /opt/optware.sh"
