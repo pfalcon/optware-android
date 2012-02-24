@@ -261,13 +261,13 @@ adb shell su -c "echo nameserver 8.8.8.8 >/opt/etc/resolv.conf"
 # On a normal Android system, /etc is symlink to /system/etc, but just in case...
 t_mkdir_p /etc
 # but for normal system, we need to remount /system
-adb shell su -c "mount -o rw,remount /system /system"
+t_remount_rw /system
 adb shell su -c "rm /etc/resolv.conf"
 t_cd_ln . -s /opt/etc/resolv.conf /etc/resolv.conf
 
 echo "== Configuring /etc/mtab =="
 t_cd_ln . -s /proc/mounts /etc/mtab
-adb shell su -c "mount -o ro,remount /system /system"
+t_remount_ro /system
 
 echo "== Creating optware init script =="
 adb shell su -c "echo #!/system/bin/sh >/opt/optware-init.sh"
@@ -288,7 +288,7 @@ adb shell su -c "echo export PATH=/opt/sbin:/opt/bin:/bin:/system/bin >>/opt/opt
 adb shell su -c "echo /bin/sh >>/opt/optware.sh"
 t_chmod 0755 /opt/optware.sh
 
-adb shell su -c "mount -o ro,remount rootfs /"
+t_remount_ro /
 
 echo "Optware for Android installation complete."
 echo "To start optware session, execute /opt/optware.sh"
