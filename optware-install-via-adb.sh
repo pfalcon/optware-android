@@ -141,18 +141,22 @@ fetch_package () {
     fi
 }
 
+fetch_toolchain () {
+    if [ ! -f $cs08q1_fname ]; then
+        echo "You need CodeSourcery ARM-Linux toolchain release 2008q1: $cs08q1_fname"
+        echo "if you have this file on your system already, press Ctrl-C now and copy"
+        echo "it into the current directory. Otherwise, press Enter to download it (65MB)."
+        read
+        wget $cs08q1_url
+    fi
+}
+
+
 #
 # Main code
 #
 
-if [ ! -f $cs08q1_fname ]; then
-    echo "You need CodeSourcery ARM-Linux toolchain release 2008q1: $cs08q1_fname"
-    echo "if you have this file on your system already, press Ctrl-C now and copy"
-    echo "it into the current directory. Otherwise, press Enter to download it (65MB)."
-    read
-    wget $cs08q1_url
-fi
-
+fetch_toolchain
 fetch_package_index
 ipkg_fname=$(get_package_fname ipkg-opt)
 wget_fname=$(get_package_fname wget)
