@@ -16,13 +16,13 @@
 OPTWARE_DIR=/data/local/optware
 WRITABLE_DIR=/data/local
 
-feed=http://ipkg.nslu2-linux.org/feeds/optware/cs08q1armel/cross/stable
-
+FEED=http://ipkg.nslu2-linux.org/feeds/optware/cs08q1armel/cross/stable
 
 # DO NOT edit anything below this line unless you know what you are doing
 
 tmp_dir=$WRITABLE_DIR/optware.tmp
-cs08q1_fname=arm-2008q1-126-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+cs08q1_url=https://sourcery.mentor.com/sgpp/lite/arm/portal/package2549/public/arm-none-linux-gnueabi/arm-2008q1-126-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+cs08q1_fname=$(basename $cs08q1_url)
 libc_path=arm-2008q1/arm-none-linux-gnueabi/libc
 libc_libs="lib/ld-2.5.so ld-linux.so.3 \
       lib/libc-2.5.so libc.so.6 \
@@ -118,7 +118,7 @@ install_ipkg () {
 fetch_package_index () {
     if [ ! -f Packages ]; then
         echo "Downloading Optware package index"
-        wget -q $feed/Packages
+        wget -q $FEED/Packages
     else
         echo "Using cached Optware package index"
     fi
@@ -135,15 +135,22 @@ fetch_package () {
     fi
     if [ ! -f "$1" ]; then
         echo "Downloading Optware package $1"
-        wget -q $feed/$1
+        wget -q $FEED/$1
     else
         echo "Using cached package $1"
     fi
 }
 
+#
+# Main code
+#
+
 if [ ! -f $cs08q1_fname ]; then
-    echo "You need CodeSourcery ARM-Linux toolchain: $cs08q1_fname"
-    exit 1
+    echo "You need CodeSourcery ARM-Linux toolchain release 2008q1: $cs08q1_fname"
+    echo "if you have this file on your system already, press Ctrl-C now and copy"
+    echo "it into the current directory. Otherwise, press Enter to download it (65MB)."
+    read
+    wget $cs08q1_url
 fi
 
 fetch_package_index
@@ -211,7 +218,7 @@ t_cd_ln /bin -s /opt/bin/busybox ln
 echo "== Configuring package feed =="
 t_mkdir_p /opt/etc
 t_mkdir_p /opt/etc/ipkg
-adb shell su -c "echo src cross $feed >/opt/etc/ipkg/feeds.conf"
+adb shell su -c "echo src cross $FEED >/opt/etc/ipkg/feeds.conf"
 
 echo "== Configuring domain name resolution =="
 adb shell su -c "echo nameserver 8.8.8.8 >/opt/etc/resolv.conf"
