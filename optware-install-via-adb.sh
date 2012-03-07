@@ -24,7 +24,7 @@
 #
 # OPTWARE_DIR is where to install optware, it should be on a partition with
 # normal Unix filesystem (permissions, etc.)
-OPTWARE_DIR=/data/local/optware
+OPTWARE_DIR=/data/opt
 ADB_WRITABLE_DIR=/data/local
 
 FEED=http://ipkg.nslu2-linux.org/feeds/optware/cs08q1armel/cross/stable
