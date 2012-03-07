@@ -74,6 +74,16 @@ t_mkdir_p () {
     adb shell su -c "ls $1 >/dev/null 2>&1 || mkdir $1"
 }
 
+t_rm_f () {
+    # Doesn't complain if file not there
+    adb shell su -c "ls $1 >/dev/null 2>&1 && rm $1"
+}
+
+t_rm_rf () {
+    # Doesn't complain if dir not there
+    adb shell su -c "ls $1 >/dev/null 2>&1 && rm -r $1"
+}
+
 t_remount_rw () {
     adb shell su -c "mount -o rw,remount $1 $1"
 }
@@ -218,8 +228,8 @@ t_remount_rw /
 
 # Start from scratch
 echo "== Initializing optware environment =="
-adb shell rm -r $tmp_dir
-adb shell mkdir $tmp_dir
+t_rm_rf $tmp_dir
+t_mkdir_p $tmp_dir
 
 t_mkdir_p $OPTWARE_DIR
 t_cd_ln . -s $OPTWARE_DIR /opt
@@ -284,7 +294,7 @@ adb shell su -c "echo nameserver 8.8.8.8 >/opt/etc/resolv.conf"
 t_mkdir_p /etc
 # but for normal system, we need to remount /system
 t_remount_rw /system
-adb shell su -c "rm /etc/resolv.conf"
+t_rm_f /etc/resolv.conf
 t_cd_ln . -s /opt/etc/resolv.conf /etc/resolv.conf
 
 echo "== Configuring /etc/mtab =="
