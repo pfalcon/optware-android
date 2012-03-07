@@ -160,12 +160,18 @@ fetch_toolchain () {
 }
 
 optware_uninstall () {
+    t_remount_rw /
     adb shell su -c "rm -r $OPTWARE_DIR"
     adb shell su -c "rm /lib"
     adb shell su -c "rm /bin"
     adb shell su -c "rm /opt"
     adb shell su -c "rm /tmp"
+    t_remount_ro /
+    t_remount_rw /system
+    adb shell su -c "rm /etc/resolv.conf"
+    adb shell su -c "rm /etc/mtab"
     adb shell rm -r $tmp_dir
+    t_remount_ro /system
 }
 
 #
@@ -179,9 +185,7 @@ if [ "$1" == "" ]; then
 fi
 
 if [ "$1" == "uninstall" ]; then
-    t_remount_rw /
     optware_uninstall
-    t_remount_ro /
     exit
 fi
 
