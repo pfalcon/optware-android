@@ -340,4 +340,4 @@ adb shell PATH=/opt/bin:/bin /opt/bin/ipkg install wget
 adb shell PATH=/opt/bin:/bin /opt/bin/ipkg install busybox
 
 echo "Optware for Android installation complete."
-echo "To start optware session, execute $OPTWARE_DIR/$start_script"
+echo "To start optware session, execute $OPTWARE_DIR/$start_script on the device"
