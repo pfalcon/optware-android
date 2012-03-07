@@ -1,11 +1,13 @@
 #!/bin/sh
 #
-# Optware setup script for Android
+# NSLU2-Linux Optware setup script for Android
 # Copyright (c) 2012 Paul Sokolovsky <pfalcon@users.sourceforge.net>
 # License: GPLv3, http://www.gnu.org/licenses/gpl.html
 #
-# Optware binary packages repository (aka feed):
-# http://ipkg.nslu2-linux.org/feeds/optware/cs08q1armel/cross/stable
+# http://sf.net/p/optware-android/
+#
+# Optware ARM binary packages repositories (aka feeds):
+# http://ipkg.nslu2-linux.org/feeds/optware/cs08q1armel/
 #
 # Optware source code Subversion repository:
 # svn co http://svn.nslu2-linux.org/svnroot/optware/trunk/
@@ -27,6 +29,7 @@
 OPTWARE_DIR=/data/opt
 ADB_WRITABLE_DIR=/data/local
 
+# Particular field to install from, stable by default
 FEED=http://ipkg.nslu2-linux.org/feeds/optware/cs08q1armel/cross/stable
 
 # DO NOT edit anything below this line unless you know what you are doing
