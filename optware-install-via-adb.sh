@@ -13,14 +13,25 @@
 
 #set -x
 
+# To install optware, we need root anyway. However, the fact that we can
+# obtain root access on device doesn't mean we have root access with
+# "adb push", i.e. can push to any location from host. So, we need
+# a location writable by adb as a temporary transfer area. That's
+# ADB_WRITABLE_DIR. /data/local is usually a good choice for most devices,
+# but that can be anything, for example, /sdcard (there's no requirement
+# for the filesystem with that dir supported Unix permissions, this script
+# will get it right).
+#
+# OPTWARE_DIR is where to install optware, it should be on a partition with
+# normal Unix filesystem (permissions, etc.)
 OPTWARE_DIR=/data/local/optware
-WRITABLE_DIR=/data/local
+ADB_WRITABLE_DIR=/data/local
 
 FEED=http://ipkg.nslu2-linux.org/feeds/optware/cs08q1armel/cross/stable
 
 # DO NOT edit anything below this line unless you know what you are doing
 
-tmp_dir=$WRITABLE_DIR/optware.tmp
+tmp_dir=$ADB_WRITABLE_DIR/optware.tmp
 cs08q1_url=https://sourcery.mentor.com/sgpp/lite/arm/portal/package2549/public/arm-none-linux-gnueabi/arm-2008q1-126-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
 cs08q1_fname=$(basename $cs08q1_url)
 libc_path=arm-2008q1/arm-none-linux-gnueabi/libc
