@@ -31,6 +31,7 @@ FEED=http://ipkg.nslu2-linux.org/feeds/optware/cs08q1armel/cross/stable
 
 # DO NOT edit anything below this line unless you know what you are doing
 
+start_script=start.sh
 tmp_dir=$ADB_WRITABLE_DIR/optware.tmp
 cs08q1_url=https://sourcery.mentor.com/sgpp/lite/arm/portal/package2549/public/arm-none-linux-gnueabi/arm-2008q1-126-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
 cs08q1_fname=$(basename $cs08q1_url)
@@ -300,13 +301,13 @@ adb shell su -c "echo mount -o ro,remount rootfs / >>/opt/optware-init.sh"
 t_chmod 0755 /opt/optware-init.sh
 
 echo "== Creating optware startup script =="
-adb shell su -c "echo #!/system/bin/sh >/opt/optware.sh"
-adb shell su -c "echo 'ls /opt >/dev/null 2>&1 ||' su -c $OPTWARE_DIR/optware-init.sh >>/opt/optware.sh"
-adb shell su -c "echo export PATH=/opt/sbin:/opt/bin:/bin:/system/bin >>/opt/optware.sh"
-adb shell su -c "echo 'if busybox test \\\$(busybox id -u) = 0; then HOME=/home/root; else HOME=/home/user; fi' >>/opt/optware.sh"
-adb shell su -c "echo export HOME>>/opt/optware.sh"
-adb shell su -c "echo /bin/sh >>/opt/optware.sh"
-t_chmod 0755 /opt/optware.sh
+adb shell su -c "echo #!/system/bin/sh >/opt/$start_script"
+adb shell su -c "echo 'ls /opt >/dev/null 2>&1 ||' su -c $OPTWARE_DIR/optware-init.sh >>/opt/$start_script"
+adb shell su -c "echo export PATH=/opt/sbin:/opt/bin:/bin:/system/bin >>/opt/$start_script"
+adb shell su -c "echo 'if busybox test \\\$(busybox id -u) = 0; then HOME=/home/root; else HOME=/home/user; fi' >>/opt/$start_script"
+adb shell su -c "echo export HOME>>/opt/$start_script"
+adb shell su -c "echo /bin/sh >>/opt/$start_script"
+t_chmod 0755 /opt/$start_script
 
 t_remount_ro /
 
@@ -325,4 +326,4 @@ adb shell PATH=/opt/bin:/bin /opt/bin/ipkg install wget
 adb shell PATH=/opt/bin:/bin /opt/bin/ipkg install busybox
 
 echo "Optware for Android installation complete."
-echo "To start optware session, execute /opt/optware.sh"
+echo "To start optware session, execute $OPTWARE_DIR/$start_script"
