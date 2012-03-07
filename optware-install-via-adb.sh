@@ -195,8 +195,9 @@ optware_uninstall () {
     t_remount_rw /system
     adb shell su -c "rm /etc/resolv.conf"
     adb shell su -c "rm /etc/mtab"
-    adb shell rm -r $tmp_dir
+    t_rm_rf $tmp_dir
     t_remount_ro /system
+    echo "Optware sucessfully uninstalled"
 }
 
 #
