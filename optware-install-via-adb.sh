@@ -2,7 +2,7 @@
 #
 # Optware setup script for Android
 # Copyright (c) 2012 Paul Sokolovsky <pfalcon@users.sourceforge.net>
-# Lincense: GPLv3, http://www.gnu.org/licenses/gpl.html
+# License: GPLv3, http://www.gnu.org/licenses/gpl.html
 #
 # Optware binary packages repository (aka feed):
 # http://ipkg.nslu2-linux.org/feeds/optware/cs08q1armel/cross/stable
