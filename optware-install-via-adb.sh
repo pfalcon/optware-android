@@ -199,6 +199,8 @@ optware_uninstall () {
     t_remount_rw /system
     adb shell su -c "rm /etc/resolv.conf"
     adb shell su -c "rm /etc/mtab"
+    adb shell su -c "rm /etc/passwd"
+    adb shell su -c "rm /etc/group"
     t_rm_rf $tmp_dir
     t_remount_ro /system
     echo "Optware sucessfully uninstalled"
@@ -304,6 +306,16 @@ t_cd_ln . -s /opt/etc/resolv.conf /etc/resolv.conf
 
 echo "== Configuring /etc/mtab =="
 t_cd_ln . -s /proc/mounts /etc/mtab
+
+echo "== Configuring users =="
+adb shell su -c "echo root:x:0:0:root:/home/root:/bin/sh >/opt/etc/passwd"
+adb shell su -c "echo user:x:1000:1000:user:/home/user:/bin/sh >>/opt/etc/passwd"
+t_cd_ln . -s /opt/etc/passwd /etc/passwd
+
+echo "== Configuring groups =="
+adb shell su -c "echo root:x:0:root >/opt/etc/group"
+adb shell su -c "echo user:x:1000:user >>/opt/etc/group"
+t_cd_ln . -s /opt/etc/group /etc/group
 t_remount_ro /system
 
 echo "== Creating optware init script =="
