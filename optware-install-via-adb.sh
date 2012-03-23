@@ -129,9 +129,6 @@ install_system_bin () {
 }
 
 install_libc () {
-    t_mkdir_p $OPTWARE_DIR/rootlib
-    t_cd_ln . -s $OPTWARE_DIR/rootlib /lib
-
     while [ -n "$1" ]; do
         local lib=$1
         shift
@@ -253,12 +250,16 @@ t_cd_ln . -s $OPTWARE_DIR /opt
 t_mkdir_p $OPTWARE_DIR/rootbin
 t_cd_ln . -s $OPTWARE_DIR/rootbin /bin
 
+t_mkdir_p $OPTWARE_DIR/rootlib
+t_cd_ln . -s $OPTWARE_DIR/rootlib /lib
+
 t_mkdir_p $OPTWARE_DIR/tmp
 t_cd_ln . -s $OPTWARE_DIR/tmp /tmp
 
 t_mkdir_p $OPTWARE_DIR/home
 t_mkdir_p $OPTWARE_DIR/home/root
 t_mkdir_p $OPTWARE_DIR/home/user
+t_cd_ln . -s $OPTWARE_DIR/home /home
 
 echo "== Installing libc =="
 extract_libc
