@@ -48,6 +48,9 @@ libc_libs="lib/ld-2.5.so ld-linux.so.3 \
       lib/libdl-2.5.so libdl.so.2 \
       lib/libnss_dns-2.5.so libnss_dns.so.2 \
       lib/libutil-2.5.so libutil.so.1 \
+      lib/libgcc_s.so.1 libgcc_s.so \
+      lib/libnsl-2.5.so libnsl.so.1 \
+      lib/libcrypt-2.5.so libcrypt.so.1 \
       "
 
 #
