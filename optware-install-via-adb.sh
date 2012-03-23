@@ -51,6 +51,15 @@ libc_libs="lib/ld-2.5.so ld-linux.so.3 \
       lib/libgcc_s.so.1 libgcc_s.so \
       lib/libnsl-2.5.so libnsl.so.1 \
       lib/libcrypt-2.5.so libcrypt.so.1 \
+      lib/libBrokenLocale-2.5.so libBrokenLocale.so.1 \
+      lib/libanl-2.5.so libanl.so.1 \
+      lib/libcidn-2.5.so libcidn.so.1 \
+      lib/libnss_compat-2.5.so libnss_compat.so.2 \
+      lib/libnss_files-2.5.so libnss_files.so.2 \
+      lib/libnss_hesiod-2.5.so libnss_hesiod.so.2 \
+      lib/libnss_nis-2.5.so libnss_nis.so.2 \
+      lib/libnss_nisplus-2.5.so libnss_nisplus.so.2 \
+      lib/libthread_db-1.0.so libthread_db.so.1 \
       "
 
 #
