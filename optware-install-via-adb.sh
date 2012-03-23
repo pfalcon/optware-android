@@ -193,6 +193,7 @@ optware_uninstall () {
     adb shell su -c "rm /lib"
     adb shell su -c "rm /bin"
     adb shell su -c "rm /opt"
+    adb shell su -c "rm /home"
     adb shell su -c "rm /tmp"
     t_remount_ro /
     t_remount_rw /system
@@ -313,6 +314,7 @@ adb shell su -c "echo mount -o rw,remount rootfs / >>/opt/optware-init.sh"
 adb shell su -c "echo ln -s $OPTWARE_DIR /opt >>/opt/optware-init.sh"
 adb shell su -c "echo ln -s $OPTWARE_DIR/rootlib /lib >>/opt/optware-init.sh"
 adb shell su -c "echo ln -s $OPTWARE_DIR/rootbin /bin >>/opt/optware-init.sh"
+adb shell su -c "echo ln -s $OPTWARE_DIR/home /home >>/opt/optware-init.sh"
 adb shell su -c "echo ln -s $OPTWARE_DIR/tmp /tmp >>/opt/optware-init.sh"
 adb shell su -c "echo mount -o ro,remount rootfs / >>/opt/optware-init.sh"
 t_chmod 0755 /opt/optware-init.sh
