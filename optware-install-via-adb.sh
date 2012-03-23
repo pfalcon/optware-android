@@ -320,12 +320,12 @@ adb shell su -c "echo mount -o ro,remount rootfs / >>/opt/optware-init.sh"
 t_chmod 0755 /opt/optware-init.sh
 
 echo "== Creating optware startup script =="
-adb shell su -c "echo #!/system/bin/sh >/opt/$start_script"
+adb shell su -c "echo \#\!/system/bin/sh >/opt/$start_script"
 adb shell su -c "echo 'ls /opt >/dev/null 2>&1 ||' su -c $OPTWARE_DIR/optware-init.sh >>/opt/$start_script"
 adb shell su -c "echo export PATH=/opt/sbin:/opt/bin:/bin:/system/bin >>/opt/$start_script"
-adb shell su -c "echo 'if busybox test \\\$(busybox id -u) = 0; then HOME=/home/root; else HOME=/home/user; fi' >>/opt/$start_script"
+adb shell su -c "echo 'if busybox test \\\$(busybox id -u) = 0; then T_UID=0; HOME=/home/root; else T_UID=1000; HOME=/home/user; fi' >>/opt/$start_script"
 adb shell su -c "echo export HOME>>/opt/$start_script"
-adb shell su -c "echo /bin/sh >>/opt/$start_script"
+adb shell su -c "echo su -c \\\"su -l -s /bin/sh \\\$T_UID\\\" >>/opt/$start_script"
 t_chmod 0755 /opt/$start_script
 
 t_remount_ro /
