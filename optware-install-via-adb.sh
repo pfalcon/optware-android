@@ -299,6 +299,9 @@ t_cd_ln /bin -s /opt/bin/busybox sort
 t_cd_ln /bin -s /opt/bin/busybox dirname
 t_cd_ln /bin -s /opt/bin/busybox ln
 t_cd_ln /bin -s /opt/bin/busybox mv
+t_cd_ln /bin -s /opt/bin/busybox cat
+t_cd_ln /bin -s /opt/bin/busybox chown
+t_cd_ln /bin -s /opt/bin/busybox chmod
 
 echo "== Configuring package feed =="
 t_mkdir_p /opt/etc
