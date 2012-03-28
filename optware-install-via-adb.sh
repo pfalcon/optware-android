@@ -330,7 +330,7 @@ t_cd_ln . -s /opt/etc/group /etc/group
 t_remount_ro /system
 
 echo "== Creating optware init script =="
-adb shell su -c "echo #!/system/bin/sh >/opt/optware-init.sh"
+adb shell su -c "echo \#\!/system/bin/sh >/opt/optware-init.sh"
 adb shell su -c "echo 'ls /opt >/dev/null 2>&1 && exit' >>/opt/optware-init.sh"
 adb shell su -c "echo echo Reinitializing optware rootfs links >>/opt/optware-init.sh"
 adb shell su -c "echo mount -o rw,remount rootfs / >>/opt/optware-init.sh"
@@ -342,7 +342,7 @@ adb shell su -c "echo mount -o ro,remount rootfs / >>/opt/optware-init.sh"
 t_chmod 0755 /opt/optware-init.sh
 
 echo "== Creating optware startup script =="
-adb shell su -c "echo #!/system/bin/sh >/opt/$start_script"
+adb shell su -c "echo \#\!/system/bin/sh >/opt/$start_script"
 adb shell su -c "echo 'ls /opt >/dev/null 2>&1 ||' su -c $OPTWARE_DIR/optware-init.sh >>/opt/$start_script"
 adb shell su -c "echo export PATH=/opt/sbin:/opt/bin:/bin:/system/bin >>/opt/$start_script"
 adb shell su -c "echo 'if busybox test \\\$(busybox id -u) = 0; then HOME=/home/root; else HOME=/home/user; fi' >>/opt/$start_script"
