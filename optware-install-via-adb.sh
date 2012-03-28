@@ -129,9 +129,6 @@ install_system_bin () {
 }
 
 install_libc () {
-    t_mkdir_p $OPTWARE_DIR/rootlib
-    t_cd_ln . -s $OPTWARE_DIR/rootlib /lib
-
     while [ -n "$1" ]; do
         local lib=$1
         shift
@@ -202,6 +199,7 @@ optware_uninstall () {
     adb shell su -c "rm /lib"
     adb shell su -c "rm /bin"
     adb shell su -c "rm /opt"
+    adb shell su -c "rm /home"
     adb shell su -c "rm /tmp"
     t_remount_ro /
     t_remount_rw /system
@@ -252,12 +250,16 @@ t_cd_ln . -s $OPTWARE_DIR /opt
 t_mkdir_p $OPTWARE_DIR/rootbin
 t_cd_ln . -s $OPTWARE_DIR/rootbin /bin
 
+t_mkdir_p $OPTWARE_DIR/rootlib
+t_cd_ln . -s $OPTWARE_DIR/rootlib /lib
+
 t_mkdir_p $OPTWARE_DIR/tmp
 t_cd_ln . -s $OPTWARE_DIR/tmp /tmp
 
 t_mkdir_p $OPTWARE_DIR/home
 t_mkdir_p $OPTWARE_DIR/home/root
 t_mkdir_p $OPTWARE_DIR/home/user
+t_cd_ln . -s $OPTWARE_DIR/home /home
 
 echo "== Installing libc =="
 extract_libc
@@ -330,19 +332,20 @@ t_cd_ln . -s /opt/etc/group /etc/group
 t_remount_ro /system
 
 echo "== Creating optware init script =="
-adb shell su -c "echo #!/system/bin/sh >/opt/optware-init.sh"
+adb shell su -c "echo \#\!/system/bin/sh >/opt/optware-init.sh"
 adb shell su -c "echo 'ls /opt >/dev/null 2>&1 && exit' >>/opt/optware-init.sh"
 adb shell su -c "echo echo Reinitializing optware rootfs links >>/opt/optware-init.sh"
 adb shell su -c "echo mount -o rw,remount rootfs / >>/opt/optware-init.sh"
 adb shell su -c "echo ln -s $OPTWARE_DIR /opt >>/opt/optware-init.sh"
 adb shell su -c "echo ln -s $OPTWARE_DIR/rootlib /lib >>/opt/optware-init.sh"
 adb shell su -c "echo ln -s $OPTWARE_DIR/rootbin /bin >>/opt/optware-init.sh"
+adb shell su -c "echo ln -s $OPTWARE_DIR/home /home >>/opt/optware-init.sh"
 adb shell su -c "echo ln -s $OPTWARE_DIR/tmp /tmp >>/opt/optware-init.sh"
 adb shell su -c "echo mount -o ro,remount rootfs / >>/opt/optware-init.sh"
 t_chmod 0755 /opt/optware-init.sh
 
 echo "== Creating optware startup script =="
-adb shell su -c "echo #!/system/bin/sh >/opt/$start_script"
+adb shell su -c "echo \#\!/system/bin/sh >/opt/$start_script"
 adb shell su -c "echo 'ls /opt >/dev/null 2>&1 ||' su -c $OPTWARE_DIR/optware-init.sh >>/opt/$start_script"
 adb shell su -c "echo export PATH=/opt/sbin:/opt/bin:/bin:/system/bin >>/opt/$start_script"
 adb shell su -c "echo 'if busybox test \\\$(busybox id -u) = 0; then HOME=/home/root; else HOME=/home/user; fi' >>/opt/$start_script"
@@ -365,6 +368,9 @@ adb shell PATH=/opt/bin:/bin /opt/bin/ipkg update
 adb shell PATH=/opt/bin:/bin /opt/bin/ipkg install ipkg-opt
 adb shell PATH=/opt/bin:/bin /opt/bin/ipkg install wget
 adb shell PATH=/opt/bin:/bin /opt/bin/ipkg install busybox
+
+echo "== Cleaning local directory =="
+rm -rf *.ipk Packages opt arm-2008q1
 
 echo "Optware for Android installation complete."
 echo "To start optware session, execute $OPTWARE_DIR/$start_script on the device"
