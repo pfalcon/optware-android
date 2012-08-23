@@ -290,6 +290,7 @@ t_cd_ln /bin -s /opt/bin/busybox sh
 # script to properly (re)install busybox itself
 t_cd_ln /bin -s /opt/bin/busybox echo
 t_cd_ln /bin -s /opt/bin/busybox rm
+t_cd_ln /bin -s /opt/bin/busybox rmdir
 t_cd_ln /bin -s /opt/bin/busybox sed
 t_cd_ln /bin -s /opt/bin/busybox mkdir
 t_cd_ln /bin -s /opt/bin/busybox head
@@ -320,12 +321,12 @@ t_cd_ln . -s /proc/mounts /etc/mtab
 
 echo "== Configuring users =="
 adb shell su -c "echo root:x:0:0:root:/opt/home/root:/bin/sh >/opt/etc/passwd"
-adb shell su -c "echo user:x:1000:1000:user:/opt/home/user:/bin/sh >>/opt/etc/passwd"
+adb shell su -c "echo user:x:2000:2000:user:/opt/home/user:/bin/sh >>/opt/etc/passwd"
 t_cd_ln . -s /opt/etc/passwd /etc/passwd
 
 echo "== Configuring groups =="
 adb shell su -c "echo root:x:0:root >/opt/etc/group"
-adb shell su -c "echo user:x:1000:user >>/opt/etc/group"
+adb shell su -c "echo user:x:2000:user >>/opt/etc/group"
 t_cd_ln . -s /opt/etc/group /etc/group
 t_remount_ro /system
 
