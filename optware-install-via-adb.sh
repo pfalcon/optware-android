@@ -281,7 +281,7 @@ tar -xOzf $busybox_fname ./data.tar.gz | tar -xzf -
 adb push opt $tmp_dir
 install_bin busybox
 
-adb shell rm -r $tmp_dir
+t_rm_rf $tmp_dir
 
 echo "== Initializing bootstrap /bin =="
 # We need sane shell as /bin/sh
