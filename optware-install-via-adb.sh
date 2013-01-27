@@ -321,12 +321,12 @@ t_cd_ln . -s /proc/mounts /etc/mtab
 
 echo "== Configuring users =="
 adb shell su -c "echo root:x:0:0:root:/opt/home/root:/bin/sh >/opt/etc/passwd"
-adb shell su -c "echo user:x:2000:2000:user:/opt/home/user:/bin/sh >>/opt/etc/passwd"
+adb shell su -c "echo shell:x:2000:2000:shell:/opt/home/user:/bin/sh >>/opt/etc/passwd"
 t_cd_ln . -s /opt/etc/passwd /etc/passwd
 
 echo "== Configuring groups =="
 adb shell su -c "echo root:x:0:root >/opt/etc/group"
-adb shell su -c "echo user:x:2000:user >>/opt/etc/group"
+adb shell su -c "echo shell:x:2000:shell >>/opt/etc/group"
 t_cd_ln . -s /opt/etc/group /etc/group
 t_remount_ro /system
 
