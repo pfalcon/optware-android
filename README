@@ -1,0 +1,19 @@
+NSLU2-Linux Optware for Android
+===============================
+
+This project provides a generic bootstrap script to install
+NSLU2-Linux Optware (http://www.nslu2-linux.org/wiki/Optware/HomePage)
+on any Android device which has root access.
+
+Unlike other optware-for-android projects you may find on the Internet,
+this project:
+
+* Intended to be a generic install script suitable for any device.
+  It may be not there just yet, but that's the aim.
+
+* Doesn't ship binary blobs of unknown origin. Any binaries it
+  installs on your device, it first downloads from well-known sources
+  like NSLU2 Optware repository itself or CodeSourcery toolchain
+  archives (for libc on which Optware for ARM depends).
+
+More info: https://sf.net/p/optware-android/
