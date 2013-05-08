@@ -281,8 +281,6 @@ tar -xOzf $busybox_fname ./data.tar.gz | tar -xzf -
 adb push opt $tmp_dir
 install_bin busybox
 
-t_rm_rf $tmp_dir
-
 echo "== Initializing bootstrap /bin =="
 # We need sane shell as /bin/sh
 t_cd_ln /bin -s /opt/bin/busybox sh
@@ -372,6 +370,9 @@ adb shell PATH=/opt/bin:/bin /opt/bin/ipkg update
 adb shell PATH=/opt/bin:/bin /opt/bin/ipkg install ipkg-opt
 adb shell PATH=/opt/bin:/bin /opt/bin/ipkg install wget
 adb shell PATH=/opt/bin:/bin /opt/bin/ipkg install busybox
+
+echo "== Cleaning device tmp directory =="
+t_rm_rf $tmp_dir
 
 echo "== Cleaning local directory =="
 rm -rf opt arm-2008q1
