@@ -319,7 +319,7 @@ t_cd_ln . -s /opt/etc/resolv.conf /etc/resolv.conf
 echo "== Configuring GLIBC Namespace Switch =="
 adb push nsswitch.conf $tmp_dir/nsswitch.conf
 t_cp $tmp_dir/nsswitch.conf /etc/nsswitch.conf
-t_chmod 0755 /etc/nsswitch.conf
+t_chmod 0644 /etc/nsswitch.conf
 t_rm_f $tmp_dir/nsswitch.conf
 
 echo "== Configuring /etc/mtab =="
