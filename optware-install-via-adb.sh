@@ -352,6 +352,7 @@ adb shell su -c "echo 'ls /opt >/dev/null 2>&1 ||' su -c $OPTWARE_DIR/optware-in
 adb shell su -c "echo export PATH=/opt/sbin:/opt/bin:/bin:/system/bin >>/opt/$start_script"
 adb shell su -c "echo 'if busybox test \\\$(busybox id -u) = 0; then HOME=/opt/home/root; else HOME=/opt/home/user; fi' >>/opt/$start_script"
 adb shell su -c "echo export HOME>>/opt/$start_script"
+adb shell su -c "echo export TMPDIR=/tmp >>/opt/$start_script"
 adb shell su -c "echo /bin/sh >>/opt/$start_script"
 t_chmod 0755 /opt/$start_script
 
