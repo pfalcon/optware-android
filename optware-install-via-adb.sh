@@ -299,6 +299,10 @@ t_cd_ln /bin -s /opt/bin/busybox mv
 t_cd_ln /bin -s /opt/bin/busybox cat
 t_cd_ln /bin -s /opt/bin/busybox chown
 t_cd_ln /bin -s /opt/bin/busybox chmod
+# gzip and tar should be part of Android, but there were reports
+# that some implementations may be broken
+t_cd_ln /bin -s /opt/bin/busybox tar
+t_cd_ln /bin -s /opt/bin/busybox gzip
 
 echo "== Configuring package feed =="
 t_mkdir_p /opt/etc
