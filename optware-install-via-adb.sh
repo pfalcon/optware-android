@@ -360,6 +360,8 @@ adb shell su -c "echo export TMPDIR=/tmp >>/opt/$start_script"
 adb shell su -c "echo umask 022 >>/opt/$start_script"
 adb shell su -c "echo /bin/sh >>/opt/$start_script"
 t_chmod 0755 /opt/$start_script
+# Create "s" symlink to ease typing on touchscreen devices
+t_cd_ln /opt -s $start_script s
 
 t_remount_ro /
 
@@ -384,4 +386,4 @@ echo "== Cleaning local directory =="
 rm -rf opt arm-2008q1
 
 echo "Optware for Android installation complete."
-echo "To start optware session, execute $OPTWARE_DIR/$start_script on the device"
+echo "To start optware session, execute $OPTWARE_DIR/$start_script (aka $OPTWARE_DIR/s) on the device"
