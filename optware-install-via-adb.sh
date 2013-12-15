@@ -353,6 +353,7 @@ t_chmod 0755 /opt/optware-init.sh
 echo "== Creating optware startup script =="
 adb shell su -c "echo \#\!/system/bin/sh >/opt/$start_script"
 adb shell su -c "echo 'ls /opt >/dev/null 2>&1 ||' su -c $OPTWARE_DIR/optware-init.sh >>/opt/$start_script"
+adb shell su -c "echo \# You may want to add /opt/local/bin to PATH below >>/opt/$start_script"
 adb shell su -c "echo export PATH=/opt/sbin:/opt/bin:/bin:/system/bin >>/opt/$start_script"
 adb shell su -c "echo 'if busybox test \\\$(busybox id -u) = 0; then HOME=/opt/home/root; else HOME=/opt/home/user; fi' >>/opt/$start_script"
 adb shell su -c "echo export HOME>>/opt/$start_script"
